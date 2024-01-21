@@ -3,64 +3,84 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./Home.css";
 import searchImg from "./Search.png";
 import { useNavigate } from "react-router-dom";
+import { Octokit } from "@octokit/rest";
 
-export const Home = () => {
+const Home = () => {
+    const octokit = new Octokit({
+        auth: "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",
+    });
     const [error, setError] = useState(null);
     const [searchFor, setInputValue] = useState("");
+    // const [repos, setRepos] = useState([]);
+    const navigate = useNavigate();
+
+    const getUserRepositories = async (username) => {
+        try {
+            const response = await octokit.rest.repos.listForUser({
+                username,
+                type: "all",
+                sort: "updated",
+                direction: "desc",
+            });
+            const data = response.data;
+            const reposLanguages = [];
+            data.forEach(async (repo) => {
+                try {
+                    const repoLanguages = await octokit.repos.listLanguages({
+                        owner: username,
+                        repo: repo,
+                    });
+
+                    reposLanguages.push(repoLanguages);
+                } catch (error) {
+                    setError(error.message);
+                }
+            });
+
+            return [data, reposLanguages];
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
     };
-    const navigate = useNavigate();
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         let username = "";
 
         if (
-            searchFor.startsWith("https://github.com") ||
-            searchFor.startsWith("github.com")
+            searchFor.startsWith("https://github.com/") ||
+            searchFor.startsWith("github.com/")
         ) {
             username = searchFor.replace(/^(https?:\/\/)?github\.com\//, "");
         } else {
             username = searchFor;
         }
-        fetch(`https://api.github.com/users/${username}`)
-            .then((response) => {
-                if (!response.ok) {
-                    if (response.status === 404) {
-                        setError({
-                            message:
-                                "Account not found, Enter a valid account name or link",
-                        });
-                    } else {
-                        setError({
-                            message:
-                                "An error occurred. Please try again later.",
-                        });
-                    }
-                }
-                return response.json();
-            })
-            .then((userDetails) => {
-                if (userDetails.message !== "Not Found") {
-                    navigate("/disp", {
-                        state: { data: userDetails },
-                    });
-                }
-                console.log(userDetails);
-            })
-            .catch((error) => {
-                console.error("Error:", error.message);
+        try {
+            const response = await octokit.rest.users.getByUsername({
+                username,
             });
+            const data = response.data;
+            const repos = await getUserRepositories(username);
+            console.log(repos[1]);
+            navigate(`/Profile/${data.login}`, {
+                state: { user: data, Repos: repos[0], langs: repos[1] },
+            });
+        } catch (error) {
+            setError(error);
+        }
     };
 
     return (
         <>
+            <title>hi</title>
             <div className="container">
                 <div className="head">
                     <h2>Welcome to gitview</h2>
                 </div>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} id="search">
                     <div className="search">
                         <input
                             type="text"
@@ -86,3 +106,5 @@ export const Home = () => {
         </>
     );
 };
+
+export default Home;
