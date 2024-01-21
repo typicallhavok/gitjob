@@ -4,9 +4,6 @@ import "./Home.css";
 import searchImg from "./Search.png";
 import { useNavigate } from "react-router-dom";
 import { Octokit } from "@octokit/rest";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const Home = () => {
     const octokit = new Octokit({
