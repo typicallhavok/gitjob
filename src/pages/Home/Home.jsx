@@ -4,10 +4,13 @@ import "./Home.css";
 import searchImg from "./Search.png";
 import { useNavigate } from "react-router-dom";
 import { Octokit } from "@octokit/rest";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const Home = () => {
     const octokit = new Octokit({
-        auth: "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",
+        auth: process.env.GIT_AUTH_TOKEN,
     });
     const [error, setError] = useState(null);
     const [searchFor, setInputValue] = useState("");
