@@ -25,9 +25,10 @@ html {
 .head {
     margin: -7em 0 2em 0;
     background-color: var(--color-bg-secondary);
-    padding: 1em;
+    padding: 0.7em;
     border-radius: 0.5em;
     border-bottom: white 2px solid;
+    font-size: 1.5em;
 }
 
 body {
@@ -46,8 +47,8 @@ body {
     align-items: center;
 }
 
-input {
-    font-size: 1.3em;
+.searchFor {
+    font-size: 1.5em;
     padding: 0.6em;
     border-radius: 0.5em;
     border: none;
@@ -58,7 +59,7 @@ input {
     width: 15em;
 }
 
-input:focus {
+.searchFor:focus {
     border: none;
     outline: none;
     background-color: var(--color-bg-active);
@@ -69,7 +70,7 @@ input:focus {
     color: var(--color-btn-hover);
 }
 
-button {
+.searchBtn {
     background-color: var(--color-btn-bg);
     color: var(--color-btn-text);
     border-radius: 0.5em;
@@ -77,15 +78,15 @@ button {
     margin-left: 1em;
 }
 
-button:hover {
+.searchBtn:hover {
     outline: var(--color-btn-hover) 1px solid;
 }
 
-button:active {
+.searchBtn:active {
     background-color: var(--color-bg-active);
 }
 
-img {
+.searchImg {
     padding: 0.6em;
     height: 3.4em;
     width: 3.4em;

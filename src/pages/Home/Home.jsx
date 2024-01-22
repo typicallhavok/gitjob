@@ -23,14 +23,20 @@ const Home = () => {
                 direction: "desc",
             });
             const data = response.data;
+            console.log(data);
             const reposLanguages = [];
             data.forEach(async (repo) => {
                 try {
-                    const repoLanguages = await octokit.repos.listLanguages({
-                        owner: username,
-                        repo: repo,
-                    });
-
+                    const repoLanguages = await octokit.request(
+                        "GET /repos/{owner}/{repo}",
+                        {
+                            owner: username,
+                            repo: repo,
+                            headers: {
+                                "X-GitHub-Api-Version": "2022-11-28",
+                            },
+                        }
+                    );
                     reposLanguages.push(repoLanguages);
                 } catch (error) {
                     setError(error.message);
@@ -90,8 +96,12 @@ const Home = () => {
                             onChange={handleInputChange}
                             required
                         />
-                        <button>
-                            <img src={searchImg} alt="Search" />
+                        <button className="searchBtn">
+                            <img
+                                src={searchImg}
+                                alt="Search"
+                                className="searchImg"
+                            />
                         </button>
                     </div>
                 </form>
