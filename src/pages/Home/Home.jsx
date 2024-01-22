@@ -91,7 +91,7 @@ const Home = () => {
                         <input
                             type="text"
                             className="searchFor"
-                            placeholder="Enter a profile link or name"
+                            placeholder="Enter a github profile link or name"
                             value={searchFor}
                             onChange={handleInputChange}
                             required
