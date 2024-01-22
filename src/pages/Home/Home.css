@@ -55,8 +55,8 @@ body {
     background-color: var(--color-bg-secondary);
     color: var(--color-text-primary);
     transition: 0.3s;
-    max-width: 15em;
-    width: 15em;
+    max-width: 20em;
+    width: 20em;
 }
 
 .searchFor:focus {
