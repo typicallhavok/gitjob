@@ -12,7 +12,6 @@ const Home = () => {
     });
     const [error, setError] = useState(null);
     const [searchFor, setInputValue] = useState("");
-    // const [repos, setRepos] = useState([]);
     const navigate = useNavigate();
 
     const getUserRepositories = async (username) => {
@@ -24,7 +23,6 @@ const Home = () => {
                 direction: "desc",
             });
             const data = response.data;
-            console.log(data);
             const repoLanguagesPromises = data.map(async (repo) => {
                 try {
                     const repoLanguages = await octokit.request(
@@ -34,17 +32,15 @@ const Home = () => {
                             repo: repo.name,
                         }
                     );
-                    console.log(Object.keys(repoLanguages.data));
                     return Object.keys(repoLanguages.data);
                 } catch (error) {
                     setError(error.message);
                 }
             });
             const reposLanguages = await Promise.all(repoLanguagesPromises);
-            console.log(reposLanguages);
             return [data, reposLanguages];
         } catch (error) {
-            console.error("Error:", error);
+            setError(error);
         }
     };
 
@@ -69,8 +65,6 @@ const Home = () => {
             });
             const data = response.data;
             const repos = await getUserRepositories(username);
-            console.log("before passing");
-            console.log(repos[1]);
             navigate(`/Profile/${data.login}`, {
                 state: { user: data, Repos: repos[0], Langs: repos[1] },
             });
