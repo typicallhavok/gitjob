@@ -56,7 +56,7 @@ body {
     color: var(--color-text-primary);
     transition: 0.3s;
     max-width: 20em;
-    width: 16em;
+    width: 16.4em;
 }
 
 .searchFor:focus {
@@ -100,4 +100,30 @@ body {
     top: 100%;
     position: absolute;
     margin: 2em;
+}
+
+@media only screen and (max-width: 400px) {
+    .head {
+        margin: -5em 0 1em 0;
+        padding: 0.5em 0.8em;
+    }
+
+    h2 {
+        font-size: 0.8em;
+    }
+
+    .searchFor {
+        font-size: 1em;
+        width: 19em;
+    }
+
+    .searchImg {
+        padding: 0.4em;
+        height: 2em;
+        width: 2em;
+    }
+
+    .error {
+        margin: 1em;
+    }
 }

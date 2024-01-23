@@ -8,8 +8,9 @@ const Disp = () => {
     const location = useLocation();
     const user = location.state?.user;
     const repos = location.state?.Repos;
-    const langs = location.state?.langs;
-    console.log(langs);
+    const langs1 = location.state?.Langs;
+    const removeLangs = ["MDX", "Batchfile"];
+
     useEffect(() => {
         document.title = "Repos";
     });
@@ -63,13 +64,12 @@ const Disp = () => {
                                     {user.blog}
                                 </a>
                             ) : (
-                                <div className="websiteUrl">
-                                    <a
-                                        href={`https://github.com/${user.login}`}
-                                    >
-                                        <p>{`https://github.com/${user.login}`}</p>
-                                    </a>
-                                </div>
+                                <a
+                                    className="websiteUrl"
+                                    href={`https://github.com/${user.login}`}
+                                >
+                                    {`https://github.com/${user.login}`}
+                                </a>
                             )}
                         </div>
                     </div>
@@ -87,8 +87,41 @@ const Disp = () => {
                                     <span className="repoTitle">
                                         {repo.name}
                                     </span>
-                                    <span>{repo.description}</span>
-                                    <span>{langs[index]}</span>
+
+                                    <span className="dispDesc">
+                                        {repo.description ? (
+                                            repo.description.length > 62 ? (
+                                                repo.description.substring(
+                                                    0,
+                                                    60
+                                                ) + "..."
+                                            ) : (
+                                                repo.description
+                                            )
+                                        ) : (
+                                            <span>No Description given</span>
+                                        )}
+                                    </span>
+                                    {langs1[index] &&
+                                        !langs1[index].every((item) =>
+                                            removeLangs.includes(item)
+                                        ) && (
+                                            <div className="footerLang">
+                                                {langs1[index]?.map(
+                                                    (element, index1) =>
+                                                        !removeLangs.includes(
+                                                            element
+                                                        ) && (
+                                                            <span
+                                                                key={index1}
+                                                                className="eachLang"
+                                                            >
+                                                                {element}
+                                                            </span>
+                                                        )
+                                                )}
+                                            </div>
+                                        )}
                                 </span>
                             );
                         })}

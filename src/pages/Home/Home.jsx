@@ -6,8 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { Octokit } from "@octokit/rest";
 
 const Home = () => {
+    const GITOKEN = process.env.GIT_AUTH_TOKEN;
     const octokit = new Octokit({
-        auth: process.env.GIT_AUTH_TOKEN,
+        auth: GITOKEN,
     });
     const [error, setError] = useState(null);
     const [searchFor, setInputValue] = useState("");
@@ -24,25 +25,23 @@ const Home = () => {
             });
             const data = response.data;
             console.log(data);
-            const reposLanguages = [];
-            data.forEach(async (repo) => {
+            const repoLanguagesPromises = data.map(async (repo) => {
                 try {
                     const repoLanguages = await octokit.request(
-                        "GET /repos/{owner}/{repo}",
+                        "GET /repos/{owner}/{repo}/languages",
                         {
                             owner: username,
-                            repo: repo,
-                            headers: {
-                                "X-GitHub-Api-Version": "2022-11-28",
-                            },
+                            repo: repo.name,
                         }
                     );
-                    reposLanguages.push(repoLanguages);
+                    console.log(Object.keys(repoLanguages.data));
+                    return Object.keys(repoLanguages.data);
                 } catch (error) {
                     setError(error.message);
                 }
             });
-
+            const reposLanguages = await Promise.all(repoLanguagesPromises);
+            console.log(reposLanguages);
             return [data, reposLanguages];
         } catch (error) {
             console.error("Error:", error);
@@ -70,9 +69,10 @@ const Home = () => {
             });
             const data = response.data;
             const repos = await getUserRepositories(username);
+            console.log("before passing");
             console.log(repos[1]);
             navigate(`/Profile/${data.login}`, {
-                state: { user: data, Repos: repos[0], langs: repos[1] },
+                state: { user: data, Repos: repos[0], Langs: repos[1] },
             });
         } catch (error) {
             setError(error);
@@ -81,7 +81,6 @@ const Home = () => {
 
     return (
         <>
-            <title>hi</title>
             <div className="container">
                 <div className="head">
                     <h2>Welcome to gitview</h2>
