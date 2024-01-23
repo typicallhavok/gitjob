@@ -1,3 +1,6 @@
+# Gitview
+A web app built to display github profiles
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
