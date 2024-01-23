@@ -12,7 +12,7 @@
 /build
 
 #environments
-.env
+*.env
 
 # misc
 .DS_Store
