@@ -40,7 +40,7 @@ const Home = () => {
             const reposLanguages = await Promise.all(repoLanguagesPromises);
             return [data, reposLanguages];
         } catch (error) {
-            null;
+            setError(error.message);
         }
     };
 
